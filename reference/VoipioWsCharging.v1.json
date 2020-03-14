@@ -1,0 +1,293 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Voipio Web Service Charging",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.your-site.com",
+      "description": "Your Accounting Service Api"
+    }
+  ],
+  "paths": {
+    "/PaymentVerification": {
+      "post": {
+        "summary": "Payment Verification",
+        "operationId": "post-PaymentVerification",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "ResNum",
+                    "RefNum",
+                    "Message",
+                    "Status"
+                  ],
+                  "properties": {
+                    "ResNum": {
+                      "type": "string",
+                      "description": "Reservation Number"
+                    },
+                    "RefNum": {
+                      "type": "string",
+                      "description": "Reference Number"
+                    },
+                    "Message": {
+                      "type": "string"
+                    },
+                    "Status": {
+                      "$ref": "#/components/schemas/VoipioStatusCode"
+                    }
+                  },
+                  "type": "object",
+                  "title": "VoipioPaymentVerificationRes"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "ResNum",
+                  "RefNum",
+                  "Amount"
+                ],
+                "properties": {
+                  "ResNum": {
+                    "type": "string",
+                    "description": "Reservation Number"
+                  },
+                  "RefNum": {
+                    "type": "string",
+                    "description": "Reference Number"
+                  },
+                  "Amount": {
+                    "type": "number",
+                    "format": "double"
+                  }
+                },
+                "type": "object",
+                "title": "VoipioPaymentVerification"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PaymentRequest": {
+      "post": {
+        "summary": "Payment Request",
+        "operationId": "post-PaymentRequest",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "VoipioId",
+                    "ResNum",
+                    "RefNum",
+                    "Message",
+                    "Status"
+                  ],
+                  "properties": {
+                    "VoipioId": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "ResNum": {
+                      "type": "string",
+                      "description": "Reservation Number"
+                    },
+                    "RefNum": {
+                      "type": "string",
+                      "description": "Reference Number"
+                    },
+                    "Message": {
+                      "type": "string"
+                    },
+                    "Status": {
+                      "$ref": "#/components/schemas/VoipioStatusCode"
+                    }
+                  },
+                  "type": "object",
+                  "title": "VoipioPaymentRequestRes"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "VoipioId",
+                  "ProductId",
+                  "UniqueId",
+                  "PhoneNumber",
+                  "ServiceNumber",
+                  "ChannelId",
+                  "CallStart",
+                  "CallEnd",
+                  "ChannelOpen",
+                  "ChannelClose",
+                  "CallDuration",
+                  "ChannelDuration",
+                  "Amount"
+                ],
+                "properties": {
+                  "VoipioId": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "ProductId": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "UniqueId": {
+                    "type": "string"
+                  },
+                  "PhoneNumber": {
+                    "type": "string"
+                  },
+                  "ServiceNumber": {
+                    "type": "string"
+                  },
+                  "ChannelId": {
+                    "type": "string"
+                  },
+                  "CallStart": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "CallEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "ChannelOpen": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "ChannelClose": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "CallDuration": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "ChannelDuration": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "Amount": {
+                    "type": "number",
+                    "format": "double"
+                  }
+                },
+                "x-examples": {},
+                "type": "object",
+                "title": "VoipioPaymentRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/CheckPhoneCharge/{phoneNumber}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "phoneNumber",
+          "in": "path",
+          "description": "Customer phone number (callerId) in international format (Ex:982188664433)",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Check Phone Charge",
+        "tags": [],
+        "responses": {
+          "": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Amount": {
+                      "type": "number",
+                      "format": "double"
+                    },
+                    "Chargeable": {
+                      "type": "boolean"
+                    },
+                    "Message": {
+                      "type": "string"
+                    },
+                    "Status": {
+                      "$ref": "#/components/schemas/VoipioStatusCode"
+                    }
+                  },
+                  "required": [
+                    "Amount",
+                    "Chargeable",
+                    "Message",
+                    "Status"
+                  ]
+                },
+                "examples": {}
+              }
+            },
+            "description": ""
+          }
+        },
+        "operationId": "get-checkphonecharge",
+        "parameters": []
+      }
+    }
+  },
+  "security": [
+    {
+      "Authorization": []
+    }
+  ],
+  "components": {
+    "schemas": {
+      "VoipioStatusCode": {
+        "type": "integer",
+        "title": "VoipioStatusCode",
+        "default": 0,
+        "enum": [
+          "UnknownError",
+          "NotFound",
+          "IncompleteInputData",
+          "CantPayWithRequestedAmount",
+          "DataMismatch",
+          "AlreadyVerified",
+          "Ok"
+        ],
+        "format": "int32",
+        "x-examples": {},
+        "description": "public enum VoipioStatusCode {\n    UnknownError = 0,\n    NotFound = 1,\n    IncompleteInputData = 2,\n    CantPayWithRequestedAmount = 3,\n    DataMismatch = 4,\n    AlreadyVerified = 5,\n    Ok = 100,\n}"
+      }
+    },
+    "securitySchemes": {
+      "Authorization": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Authorization header (Ex:Key a23#SFdiuHDsd34D&sxc8hn98H@nIU)"
+      }
+    }
+  }
+}
