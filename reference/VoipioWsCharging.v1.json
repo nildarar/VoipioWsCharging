@@ -2,12 +2,14 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Voipio Web Service Charging",
-    "version": "1.0"
+    "version": "1.0",
+    "description": "این راهنما نمونه ای از اطلاعات ارسال شده از سمت ویپیو و اطلاعاتی که ویپیو در پاسخ آماده دریافت آن است را در اختیار شما قرار میدهد.",
+    "contact": {}
   },
   "servers": [
     {
       "url": "https://api.your-site.com",
-      "description": "Your Accounting Service Api"
+      "description": "Your Accounting Api"
     }
   ],
   "paths": {
@@ -21,20 +23,16 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "required": [
-                    "ResNum",
-                    "RefNum",
-                    "Message",
-                    "Status"
-                  ],
+                  "type": "object",
+                  "title": "VoipioPaymentVerificationRes",
                   "properties": {
                     "ResNum": {
                       "type": "string",
-                      "description": "Reservation Number"
+                      "description": "Reservation Number | شماره خرید"
                     },
                     "RefNum": {
                       "type": "string",
-                      "description": "Reference Number"
+                      "description": "Reference Number | رسید دیجیتالی"
                     },
                     "Message": {
                       "type": "string"
@@ -43,8 +41,12 @@
                       "$ref": "#/components/schemas/VoipioStatusCode"
                     }
                   },
-                  "type": "object",
-                  "title": "VoipioPaymentVerificationRes"
+                  "required": [
+                    "ResNum",
+                    "RefNum",
+                    "Message",
+                    "Status"
+                  ]
                 }
               }
             }
@@ -54,31 +56,33 @@
           "content": {
             "application/json": {
               "schema": {
+                "type": "object",
+                "title": "VoipioPaymentVerification",
+                "properties": {
+                  "ResNum": {
+                    "type": "string",
+                    "description": "Reservation Number | شماره خرید"
+                  },
+                  "RefNum": {
+                    "type": "string",
+                    "description": "Reference Number | رسید دیجیتالی"
+                  },
+                  "Amount": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "مبلغ تماس"
+                  }
+                },
                 "required": [
                   "ResNum",
                   "RefNum",
                   "Amount"
-                ],
-                "properties": {
-                  "ResNum": {
-                    "type": "string",
-                    "description": "Reservation Number"
-                  },
-                  "RefNum": {
-                    "type": "string",
-                    "description": "Reference Number"
-                  },
-                  "Amount": {
-                    "type": "number",
-                    "format": "double"
-                  }
-                },
-                "type": "object",
-                "title": "VoipioPaymentVerification"
+                ]
               }
             }
           }
-        }
+        },
+        "description": "این متد در صورتی که فاکتور با موفقیت ایجاد شده باشد فراخوانی میگردد. پس از فراخوانی این متد در صورت پاسخ موفق شما، پرونده تماس سمت ویپیو بسته میشود."
       }
     },
     "/PaymentRequest": {
@@ -91,25 +95,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "required": [
-                    "VoipioId",
-                    "ResNum",
-                    "RefNum",
-                    "Message",
-                    "Status"
-                  ],
+                  "type": "object",
+                  "title": "VoipioPaymentRequestRes",
                   "properties": {
                     "VoipioId": {
                       "type": "integer",
-                      "format": "int64"
+                      "format": "int64",
+                      "description": "کد شناسایی تماس سمت ویپیو"
                     },
                     "ResNum": {
                       "type": "string",
-                      "description": "Reservation Number"
+                      "description": "Reservation Number | شماره خرید"
                     },
                     "RefNum": {
                       "type": "string",
-                      "description": "Reference Number"
+                      "description": "Reference Number | رسید دیجیتالی"
                     },
                     "Message": {
                       "type": "string"
@@ -118,8 +118,13 @@
                       "$ref": "#/components/schemas/VoipioStatusCode"
                     }
                   },
-                  "type": "object",
-                  "title": "VoipioPaymentRequestRes"
+                  "required": [
+                    "VoipioId",
+                    "ResNum",
+                    "RefNum",
+                    "Message",
+                    "Status"
+                  ]
                 }
               }
             }
@@ -129,6 +134,72 @@
           "content": {
             "application/json": {
               "schema": {
+                "x-examples": {},
+                "type": "object",
+                "title": "VoipioPaymentRequest",
+                "properties": {
+                  "VoipioId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "کد شناسایی تماس سمت ویپیو"
+                  },
+                  "ProductId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "کد محصول"
+                  },
+                  "UniqueId": {
+                    "type": "string",
+                    "description": "PBX کد تماس سمت"
+                  },
+                  "PhoneNumber": {
+                    "type": "string",
+                    "description": "شماره تلفن"
+                  },
+                  "ServiceNumber": {
+                    "type": "string",
+                    "description": "شماره خط"
+                  },
+                  "ChannelId": {
+                    "type": "string",
+                    "description": "کد مشاور"
+                  },
+                  "CallStart": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "زمان شروع تماس"
+                  },
+                  "CallEnd": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "زمان پایان تماس"
+                  },
+                  "ChannelOpen": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "زمان پاسخگویی مشاور"
+                  },
+                  "ChannelClose": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "زمان پایان پاسخگویی"
+                  },
+                  "CallDuration": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "مدت تماس"
+                  },
+                  "ChannelDuration": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "مد مشاوره"
+                  },
+                  "Amount": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "مبلغ تماس"
+                  }
+                },
                 "required": [
                   "VoipioId",
                   "ProductId",
@@ -143,64 +214,12 @@
                   "CallDuration",
                   "ChannelDuration",
                   "Amount"
-                ],
-                "properties": {
-                  "VoipioId": {
-                    "type": "integer",
-                    "format": "int64"
-                  },
-                  "ProductId": {
-                    "type": "integer",
-                    "format": "int64"
-                  },
-                  "UniqueId": {
-                    "type": "string"
-                  },
-                  "PhoneNumber": {
-                    "type": "string"
-                  },
-                  "ServiceNumber": {
-                    "type": "string"
-                  },
-                  "ChannelId": {
-                    "type": "string"
-                  },
-                  "CallStart": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "CallEnd": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "ChannelOpen": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "ChannelClose": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "CallDuration": {
-                    "type": "number",
-                    "format": "double"
-                  },
-                  "ChannelDuration": {
-                    "type": "number",
-                    "format": "double"
-                  },
-                  "Amount": {
-                    "type": "number",
-                    "format": "double"
-                  }
-                },
-                "x-examples": {},
-                "type": "object",
-                "title": "VoipioPaymentRequest"
+                ]
               }
             }
           }
-        }
+        },
+        "description": "این متد پس از پایان تماس فراخوانی شده و اطلاعات تماس را جهت صدور فاکتور به سیستم حسابداری شما ارسال میکند. شما میبایست در پاسخ این متد شماره خرید و رسید دیجیتالی را برای ویپیو ارسال کنید."
       }
     },
     "/CheckPhoneCharge/{phoneNumber}": {
@@ -227,10 +246,12 @@
                   "properties": {
                     "Amount": {
                       "type": "number",
-                      "format": "double"
+                      "format": "double",
+                      "description": "میزان اعتبار قابل استفاده"
                     },
                     "Chargeable": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "امکان استفاده از اعتبار"
                     },
                     "Message": {
                       "type": "string"
@@ -253,7 +274,8 @@
           }
         },
         "operationId": "get-checkphonecharge",
-        "parameters": []
+        "parameters": [],
+        "description": "این متد در آغاز هر تماس فراخوانی میشود. توسط این متد شماره تلفن تماس گیرنده به برای سیستم اکانتینگ به عنوان کد هویتی ارسال شده و ویپیو در پاسخ آماده دریافت مقدار اعتبار تماس گیرنده است."
       }
     }
   },
@@ -279,7 +301,7 @@
         ],
         "format": "int32",
         "x-examples": {},
-        "description": "public enum VoipioStatusCode {\n    UnknownError = 0,\n    NotFound = 1,\n    IncompleteInputData = 2,\n    CantPayWithRequestedAmount = 3,\n    DataMismatch = 4,\n    AlreadyVerified = 5,\n    Ok = 100,\n}"
+        "description": "0:UnknownError,\n1:NotFound,\n2:IncompleteInputData,\n3:CantPayWithRequestedAmount,\n4:DataMismatch,\n5:AlreadyVerified,\n100:Ok"
       }
     },
     "securitySchemes": {
